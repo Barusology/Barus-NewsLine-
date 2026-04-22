@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../models/article.dart';
 import '../services/storage_service.dart';
 import '../widgets/news_tile.dart';
@@ -17,10 +18,10 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
   @override
   void initState() {
     super.initState();
-    _loadBookmarks();
+    _bookmarksFuture = _storageService.getBookmarks();
   }
 
-  void _loadBookmarks() {
+  void _reloadBookmarks() {
     setState(() {
       _bookmarksFuture = _storageService.getBookmarks();
     });
@@ -35,7 +36,11 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
           return const Center(child: CircularProgressIndicator());
         }
 
-        final articles = snapshot.data ?? [];
+        if (snapshot.hasError) {
+          return const Center(child: Text('Failed to load bookmarks.'));
+        }
+
+        final articles = snapshot.data ?? <Article>[];
 
         if (articles.isEmpty) {
           return const Center(
@@ -53,7 +58,10 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
         return ListView.builder(
           itemCount: articles.length,
           itemBuilder: (context, index) {
-            return NewsTile(article: articles[index]);
+            return NewsTile(
+              article: articles[index],
+              onBookmarkChanged: _reloadBookmarks,
+            );
           },
         );
       },

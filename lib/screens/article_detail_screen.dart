@@ -2,15 +2,20 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../models/article.dart';
 
 class ArticleDetailScreen extends StatelessWidget {
-  final Article article;
-
   const ArticleDetailScreen({super.key, required this.article});
 
+  final Article article;
+
   Future<void> _launchUrl() async {
-    final Uri url = Uri.parse(article.url);
+    final url = Uri.tryParse(article.url);
+    if (url == null) {
+      throw Exception('Invalid article URL');
+    }
+
     if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
       throw Exception('Could not launch $url');
     }
@@ -34,19 +39,19 @@ class ArticleDetailScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 250,
                 fit: BoxFit.cover,
-                placeholder: (context, url) => Container(
+                placeholder: (context, _) => Container(
                   height: 250,
                   color: Colors.grey[200],
                   child: const Center(child: CircularProgressIndicator()),
                 ),
-                errorWidget: (context, url, error) => Container(
+                errorWidget: (context, _, __) => Container(
                   height: 250,
                   color: Colors.grey[200],
-                  child: const Icon(Icons.error),
+                  child: const Icon(Icons.broken_image),
                 ),
               ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -66,18 +71,12 @@ class ArticleDetailScreen extends StatelessWidget {
                         child: Text(
                           article.author,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: Colors.grey,
-                            fontSize: 14,
-                          ),
+                          style: const TextStyle(color: Colors.grey, fontSize: 14),
                         ),
                       ),
                       Text(
                         DateFormat('MMM dd, yyyy').format(article.publishedAt),
-                        style: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14,
-                        ),
+                        style: const TextStyle(color: Colors.grey, fontSize: 14),
                       ),
                     ],
                   ),
@@ -93,10 +92,7 @@ class ArticleDetailScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   Text(
                     article.content,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      height: 1.5,
-                    ),
+                    style: const TextStyle(fontSize: 16, height: 1.5),
                   ),
                   const SizedBox(height: 30),
                   SizedBox(

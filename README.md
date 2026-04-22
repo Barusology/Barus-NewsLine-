@@ -1,16 +1,17 @@
-# newapp
+# Barus NewsLine
 
-A new Flutter project.
+Barus NewsLine is a Flutter news reader app with top headlines, breaking-news carousel, search, and local bookmarks.
 
-## Getting Started
+## Run
 
-This project is a starting point for a Flutter application.
+```bash
+flutter run --dart-define=NEWS_API_KEY=your_newsapi_key
+```
 
-A few resources to get you started if this is your first Flutter project:
+## Features
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Top US headlines feed
+- Breaking news slider
+- Search articles
+- Bookmark/save articles locally
+- Open full article in external browser
