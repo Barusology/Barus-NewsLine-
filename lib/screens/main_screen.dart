@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
-import 'home_screen.dart';
-import 'bookmark_screen.dart';
-import '../services/news_service.dart';
+
 import '../models/article.dart';
+import '../services/news_service.dart';
 import '../widgets/news_tile.dart';
+import 'bookmark_screen.dart';
+import 'home_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -19,13 +20,17 @@ class _MainScreenState extends State<MainScreen> {
   Key _bookmarkKey = UniqueKey();
 
   List<Widget> get _screens => [
-    HomeScreen(key: _homeKey),
-    BookmarkScreen(key: _bookmarkKey),
-  ];
+        HomeScreen(key: _homeKey),
+        BookmarkScreen(key: _bookmarkKey),
+      ];
 
-  void _onTabTapped(int index) {
+  void _refreshCurrentTab() {
     setState(() {
-      _currentIndex = index;
+      if (_currentIndex == 0) {
+        _homeKey = UniqueKey();
+      } else {
+        _bookmarkKey = UniqueKey();
+      }
     });
   }
 
@@ -42,15 +47,7 @@ class _MainScreenState extends State<MainScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh, color: Colors.black),
-            onPressed: () {
-              setState(() {
-                if (_currentIndex == 0) {
-                  _homeKey = UniqueKey();
-                } else {
-                  _bookmarkKey = UniqueKey();
-                }
-              });
-            },
+            onPressed: _refreshCurrentTab,
           ),
           IconButton(
             icon: const Icon(Icons.search, color: Colors.black),
@@ -59,37 +56,37 @@ class _MainScreenState extends State<MainScreen> {
             },
           ),
           IconButton(
-           icon: const Icon(Icons.share, color: Colors.black),
+            icon: const Icon(Icons.share, color: Colors.black),
             onPressed: () {
-              Share.share('Check out this amazing News App built with Flutter!');
+              SharePlus.instance.share(
+                ShareParams(
+                  text: 'Check out this amazing News App built with Flutter!',
+                ),
+              );
             },
           ),
-         
-         
         ],
       ),
       body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        onTap: _onTabTapped,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
         selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.grey,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bookmark),
-            label: 'Bookmarks',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.bookmark), label: 'Bookmarks'),
         ],
       ),
     );
   }
 }
 
-class NewsSearchDelegate extends SearchDelegate {
+class NewsSearchDelegate extends SearchDelegate<void> {
   final NewsService newsService = NewsService();
 
   @override
@@ -116,7 +113,7 @@ class NewsSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    if (query.isEmpty) {
+    if (query.trim().isEmpty) {
       return const Center(child: Text('Please enter a search term'));
     }
 
@@ -125,18 +122,20 @@ class NewsSearchDelegate extends SearchDelegate {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
+        }
+
+        if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
-        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+        }
+
+        final articles = snapshot.data ?? <Article>[];
+        if (articles.isEmpty) {
           return const Center(child: Text('No results found'));
         }
 
-        final articles = snapshot.data!;
         return ListView.builder(
           itemCount: articles.length,
-          itemBuilder: (context, index) {
-            return NewsTile(article: articles[index]);
-          },
+          itemBuilder: (context, index) => NewsTile(article: articles[index]),
         );
       },
     );
@@ -144,6 +143,6 @@ class NewsSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-     return Container();
+    return const SizedBox.shrink();
   }
 }
