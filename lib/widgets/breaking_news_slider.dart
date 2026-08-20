@@ -52,7 +52,9 @@ class BreakingNewsSlider extends StatelessWidget {
                             fit: BoxFit.cover,
                             placeholder: (context, _) => Container(
                               color: Colors.grey[300],
-                              child: const Center(child: CircularProgressIndicator()),
+                              child: const Center(
+                                child: CircularProgressIndicator(),
+                              ),
                             ),
                             errorWidget: (context, _, __) => Container(
                               color: Colors.grey[300],
@@ -81,7 +83,10 @@ class BreakingNewsSlider extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
                               decoration: BoxDecoration(
                                 color: Colors.red,
                                 borderRadius: BorderRadius.circular(4),

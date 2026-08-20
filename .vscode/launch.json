@@ -1,0 +1,22 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Flutter (API key prompt)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define=NEWS_API_KEY=${input:newsApiKey}"
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "id": "newsApiKey",
+      "type": "promptString",
+      "description": "NewsAPI key",
+      "password": true
+    }
+  ]
+}

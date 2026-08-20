@@ -48,10 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   const Icon(Icons.error_outline, size: 60, color: Colors.red),
                   const SizedBox(height: 16),
-                  Text(
-                    snapshot.error.toString(),
-                    textAlign: TextAlign.center,
-                  ),
+                  Text(snapshot.error.toString(), textAlign: TextAlign.center),
                   const SizedBox(height: 8),
                   TextButton(
                     onPressed: _refreshNews,
@@ -70,7 +67,9 @@ class _HomeScreenState extends State<HomeScreen> {
         }
 
         final breakingNews = articles.take(5).toList();
-        final recentNews = articles.length > 5 ? articles.sublist(5) : <Article>[];
+        final recentNews = articles.length > 5
+            ? articles.sublist(5)
+            : <Article>[];
 
         return RefreshIndicator(
           onRefresh: _refreshNews,
@@ -79,7 +78,8 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (breakingNews.isNotEmpty) BreakingNewsSlider(articles: breakingNews),
+                if (breakingNews.isNotEmpty)
+                  BreakingNewsSlider(articles: breakingNews),
                 if (recentNews.isNotEmpty) ...[
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
@@ -94,10 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         const SizedBox(width: 8),
                         Expanded(
-                          child: Container(
-                            height: 1,
-                            color: Colors.grey[300],
-                          ),
+                          child: Container(height: 1, color: Colors.grey[300]),
                         ),
                       ],
                     ),

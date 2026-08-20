@@ -12,6 +12,9 @@ Copy `.env.example` to `.env` and replace the placeholder with your News API key
 flutter run --dart-define=NEWS_API_KEY=your_newsapi_key
 ```
 
+In VS Code, select `Flutter (API key prompt)` from Run and Debug to enter the
+key without saving it in the workspace.
+
 ## Testing
 
 ```bash

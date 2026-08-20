@@ -71,12 +71,18 @@ class ArticleDetailScreen extends StatelessWidget {
                         child: Text(
                           article.author,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(color: Colors.grey, fontSize: 14),
+                          style: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 14,
+                          ),
                         ),
                       ),
                       Text(
                         DateFormat('MMM dd, yyyy').format(article.publishedAt),
-                        style: const TextStyle(color: Colors.grey, fontSize: 14),
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 14,
+                        ),
                       ),
                     ],
                   ),

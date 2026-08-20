@@ -1,11 +1,11 @@
+import 'home_screen.dart';
+import 'bookmark_screen.dart';
+import '../models/article.dart';
+import '../widgets/news_tile.dart';
 import 'package:flutter/material.dart';
+import '../services/news_service.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../models/article.dart';
-import '../services/news_service.dart';
-import '../widgets/news_tile.dart';
-import 'bookmark_screen.dart';
-import 'home_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -20,9 +20,9 @@ class _MainScreenState extends State<MainScreen> {
   Key _bookmarkKey = UniqueKey();
 
   List<Widget> get _screens => [
-        HomeScreen(key: _homeKey),
-        BookmarkScreen(key: _bookmarkKey),
-      ];
+    HomeScreen(key: _homeKey),
+    BookmarkScreen(key: _bookmarkKey),
+  ];
 
   void _refreshCurrentTab() {
     setState(() {
@@ -58,10 +58,8 @@ class _MainScreenState extends State<MainScreen> {
           IconButton(
             icon: const Icon(Icons.share, color: Colors.black),
             onPressed: () {
-              SharePlus.instance.share(
-                ShareParams(
-                  text: 'Check out this amazing News App built with Flutter!',
-                ),
+              Share.share(
+                'Check out this amazing News App built with Flutter!',
               );
             },
           ),
@@ -79,7 +77,10 @@ class _MainScreenState extends State<MainScreen> {
         unselectedItemColor: Colors.grey,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.bookmark), label: 'Bookmarks'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bookmark),
+            label: 'Bookmarks',
+          ),
         ],
       ),
     );

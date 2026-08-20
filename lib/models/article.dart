@@ -26,7 +26,10 @@ class Article {
       source: Source.fromJson(json['source'] as Map<String, dynamic>?),
       author: _safeText(json['author'], fallback: 'Unknown Author'),
       title: _safeText(json['title'], fallback: 'No Title'),
-      description: _safeText(json['description'], fallback: 'No description available.'),
+      description: _safeText(
+        json['description'],
+        fallback: 'No description available.',
+      ),
       url: _safeText(json['url']),
       urlToImage: _safeText(json['urlToImage']),
       publishedAt: _safeDate(json['publishedAt']),

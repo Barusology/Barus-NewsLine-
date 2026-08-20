@@ -6,11 +6,7 @@ import '../screens/article_detail_screen.dart';
 import '../services/storage_service.dart';
 
 class NewsTile extends StatefulWidget {
-  const NewsTile({
-    super.key,
-    required this.article,
-    this.onBookmarkChanged,
-  });
+  const NewsTile({super.key, required this.article, this.onBookmarkChanged});
 
   final Article article;
   final VoidCallback? onBookmarkChanged;
@@ -116,7 +112,9 @@ class _NewsTileState extends State<NewsTile> {
                       IconButton(
                         onPressed: _toggleBookmark,
                         icon: Icon(
-                          _isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+                          _isBookmarked
+                              ? Icons.bookmark
+                              : Icons.bookmark_border,
                           color: _isBookmarked ? Colors.blue : Colors.grey,
                         ),
                       ),
@@ -127,10 +125,7 @@ class _NewsTileState extends State<NewsTile> {
                     widget.article.description,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[600],
-                    ),
+                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                   ),
                 ],
               ),
