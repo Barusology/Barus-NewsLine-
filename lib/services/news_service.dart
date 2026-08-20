@@ -1,18 +1,19 @@
 import 'dart:convert';
-
+import '../models/article.dart';
+import '../models/app_exception.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/article.dart';
+
 
 class NewsService {
-  NewsService({http.Client? client}) : _client = client ?? http.Client();
+  NewsService({http.Client? client}) : client = client ?? http.Client();
 
   static const String _baseUrl = 'newsapi.org';
   static const String _defaultCountry = 'us';
   static const Duration _requestTimeout = Duration(seconds: 15);
   static const String _apiKey = String.fromEnvironment('NEWS_API_KEY');
 
-  final http.Client _client;
+  final http.Client client;
 
   Future<List<Article>> fetchTopHeadlines() {
     return _fetchArticles(
@@ -24,21 +25,14 @@ class NewsService {
   Future<List<Article>> fetchNewsByCategory(String category) {
     return _fetchArticles(
       endpoint: '/v2/top-headlines',
-      query: {
-        'country': _defaultCountry,
-        'category': category,
-      },
+      query: {'country': _defaultCountry, 'category': category},
     );
   }
 
   Future<List<Article>> searchNews(String query) {
     return _fetchArticles(
       endpoint: '/v2/everything',
-      query: {
-        'q': query,
-        'sortBy': 'publishedAt',
-        'language': 'en',
-      },
+      query: {'q': query, 'sortBy': 'publishedAt', 'language': 'en'},
     );
   }
 
@@ -52,16 +46,13 @@ class NewsService {
       );
     }
 
-    final uri = Uri.https(_baseUrl, endpoint, {
-      ...query,
-      'apiKey': _apiKey,
-    });
+    final uri = Uri.https(_baseUrl, endpoint, {...query, 'apiKey': _apiKey});
 
-    final response = await _client.get(uri).timeout(_requestTimeout);
+    final response = await client.get(uri).timeout(_requestTimeout);
 
     if (response.statusCode != 200) {
-      throw NewsServiceException(
-        'News API request failed (${response.statusCode}).',
+      throw NetworkException(
+        'Failed to load headlines: ${response.statusCode}',
       );
     }
 
